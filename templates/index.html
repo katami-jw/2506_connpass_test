@@ -1,1 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>ガチャ風アプリ（確率指定）</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            text-align: center;
+            padding-top: 50px;
+            background-color: #f0f0f0;
+        }
+        #result {
+            margin-top: 30px;
+            font-size: 32px;
+            font-weight: bold;
+            color: #d42;
+            height: 50px;
+        }
+        #gachaBtn {
+            font-size: 20px;
+            padding: 10px 30px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎰 ガチャ（確率指定）</h1>
+    <p>候補を <strong>名前:確率</strong> の形式でカンマ区切りで入力してください</p>
+    <p>例：SSRドラゴン:1, SRナイト:9, Rスライム:90</p>
+    <input type="text" id="inputItems" placeholder="例：SSR:1,SR:9,R:90" size="50">
+    <br><br>
+    <button id="gachaBtn">引く！</button>
+    <div id="result"></div>
 
+    <script>
+        const btn = document.getElementById("gachaBtn");
+        const result = document.getElementById("result");
+
+        btn.onclick = () => {
+            const input = document.getElementById("inputItems").value;
+            const parts = input.split(",").map(i => i.trim()).filter(i => i);
+            if (parts.length === 0) {
+                alert("候補を入力してください！");
+                return;
+            }
+
+            const pool = [];
+            for (const part of parts) {
+                const [name, weightStr] = part.split(":").map(p => p.trim());
+                const weight = parseInt(weightStr);
+                if (!name || isNaN(weight) || weight <= 0) continue;
+                for (let i = 0; i < weight; i++) {
+                    pool.push(name);
+                }
+            }
+
+            if (pool.length === 0) {
+                alert("有効な候補がありません！");
+                return;
+            }
+
+            let count = 0;
+            let maxCount = 20;
+            let interval = setInterval(() => {
+                const i = Math.floor(Math.random() * pool.length);
+                result.innerText = pool[i];
+                count++;
+                if (count >= maxCount) {
+                    clearInterval(interval);
+                    result.innerText = `🎉 当たり：${pool[i]} 🎉`;
+                }
+            }, 100);
+        };
+    </script>
+</body>
+</html>
