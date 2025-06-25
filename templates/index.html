@@ -28,7 +28,8 @@
 <body>
     <h1>🚀 火星探査機の写真を見る</h1>
     <form method="post">
-        日付（YYYY-MM-DD）: <input type="text" name="date" placeholder="2020-07-01" required>
+        日付（YYYY-MM-DD）:
+        <input type="date" name="date" value="{{ date }}" required>
         <input type="submit" value="画像を取得">
     </form>
 
